@@ -1,0 +1,59 @@
+/* Dark (default) */
+:root,
+[data-theme='dark'] {
+  --bg: #0f1218;
+  --surface: #1a1e26;
+  --surface-raised: #212630;
+  --surface-hover: #262c37;
+  --border: #2b303c;
+  --border-soft: #21262f;
+  --ink: #eef0f3;
+  --ink-muted: #8d94a1;
+  --ink-faint: #5b6270;
+  --accent-admin: #7c8cf5;
+  --accent-admin-strong: #6572e0;
+  --accent-admin-ink: #0d0f14;
+  --accent-glow: rgba(124, 140, 245, 0.18);
+  --status-pending: #eab363;
+  --status-approved: #5cbf9e;
+  --status-rejected: #e0705f;
+  --status-disabled: #7b8290;
+  --grid-line: rgba(43, 48, 59, 0.4);
+  --overlay: rgba(5, 6, 9, 0.7);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --font-display: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme='light'] {
+  --bg: #f2f3f6;
+  --surface: #ffffff;
+  --surface-raised: #f6f7f9;
+  --surface-hover: #eceef2;
+  --border: #dde0e6;
+  --border-soft: #e7e9ee;
+  --ink: #171a21;
+  --ink-muted: #666d7a;
+  --ink-faint: #9aa0ab;
+  --accent-admin: #4c58d8;
+  --accent-admin-strong: #3c47c0;
+  --accent-admin-ink: #ffffff;
+  --accent-glow: rgba(76, 88, 216, 0.12);
+  --status-pending: #a86412;
+  --status-approved: #1c7b5c;
+  --status-rejected: #b13d2c;
+  --status-disabled: #6b7280;
+  --grid-line: rgba(221, 224, 230, 0.6);
+  --overlay: rgba(20, 22, 28, 0.32);
+
+  --shadow-sm: 0 1px 2px rgba(20, 22, 30, 0.06);
+  --shadow-md: 0 8px 24px rgba(20, 22, 30, 0.08);
+  --shadow-lg: 0 16px 40px rgba(20, 22, 30, 0.12);
+}

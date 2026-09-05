@@ -1,15 +1,23 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import ChatPanel from './ChatPanel';
+import NavBar from './NavBar';
 import './Layout.css';
 
-// Day 1: static shell only. The 15% panel becomes the global chat on Day 5;
-// for now it's a placeholder so the layout proportions are locked in early.
+// Layout is only ever rendered inside pages wrapped by ProtectedRoute, so
+// it's safe to assume an approved, authenticated user here. NavBar makes
+// every protected page reachable from every other one — previously only
+// Dashboard had navigation. Chat sits on the right on desktop, stacks
+// below content on mobile.
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="app-layout">
-      <aside className="app-layout__side">
-        <div className="app-layout__side-placeholder">Chat (Day 5)</div>
+      <main id="main-content" className="app-layout__main" tabIndex={-1}>
+        <NavBar />
+        {children}
+      </main>
+      <aside className="app-layout__side" aria-label="Team chat">
+        <ChatPanel />
       </aside>
-      <main className="app-layout__main">{children}</main>
     </div>
   );
 }
