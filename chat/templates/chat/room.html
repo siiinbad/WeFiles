@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% load static ui %}
+{% block title %}Chat{% endblock %}{% block location %}Chat{% endblock %}
+{% block content %}
+<div class="page-heading"><h1>Chat</h1></div>
+<section class="panel chat-room" aria-label="Team chat">
+  <div id="conversation" {% if not messages_page.has_previous %}hx-get="{% url 'chat:messages' %}" hx-trigger="wefiles:refresh from:body" hx-swap="innerHTML"{% endif %}>{% include 'chat/messages.html' %}</div>
+  <form class="chat-compose" method="post" action="{% url 'chat:send' %}" data-busy>
+    {% csrf_token %}{% include 'components/form.html' %}
+    <div class="compose-footer"><button class="btn btn-primary" type="submit">{% icon 'send' %}Send</button></div>
+  </form>
+</section>
+{% endblock %}
+{% block feature_scripts %}<script defer src="{% static 'chat/js/room.js' %}"></script>{% endblock %}

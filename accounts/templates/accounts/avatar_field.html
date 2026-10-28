@@ -1,0 +1,7 @@
+{% load ui %}
+<fieldset class="avatar-picker" aria-describedby="{{ field.auto_id }}_help{% if field.errors %} {{ field.auto_id }}_errors{% endif %}">
+  <legend>Choose your avatar <span class="avatar-library-count">30 portraits</span></legend>
+  <p class="field-help" id="{{ field.auto_id }}_help">Choose a portrait. Each full tile is scaled to fit with extra space around it. Save changes to use it across your workspace.</p>
+  {% input_field field %}
+  {% if field.errors %}<div class="field-errors" id="{{ field.auto_id }}_errors" role="alert">{{ field.errors }}</div>{% endif %}
+</fieldset>

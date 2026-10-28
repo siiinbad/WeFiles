@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}429{% endblock %}{% block content %}<section class="error-page"><div class="error-code">429</div><h1>A little breather.</h1><p>Too many attempts in a short time. Please wait 15 minutes before trying again.</p><a class="btn btn-primary" href="{% url 'core:home' %}">Back to your workspace</a></section>{% endblock %}

@@ -1,0 +1,15 @@
+{% load ui accounts_ui %}
+<div class="avatar-grid">
+  {% for group_name, options, index in widget.optgroups %}
+    {% for option in options %}
+      <label class="avatar-choice" for="{{ option.attrs.id }}">
+        <input class="avatar-radio visually-hidden" type="radio" name="{{ widget.name }}" value="{{ option.value }}" id="{{ option.attrs.id }}" data-avatar-label="{{ option.label }}"{% if option.selected %} checked{% endif %}{% if widget.attrs.disabled %} disabled{% endif %}>
+        <span class="avatar-option-body">
+          <span class="avatar" data-avatar="{{ option.value }}">{% avatar_art option.value %}</span>
+          <span class="avatar-name">{{ option.label }}</span>
+          <span class="avatar-selected" aria-hidden="true">{% icon 'check' %}</span>
+        </span>
+      </label>
+    {% endfor %}
+  {% endfor %}
+</div>

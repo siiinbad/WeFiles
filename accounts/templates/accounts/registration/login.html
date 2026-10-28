@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% load ui %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<section class="auth-card centered-card">
+  <h1>Sign in</h1>
+  <form method="post" data-busy>
+    {% csrf_token %}{% include 'components/form.html' %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <a class="forgot-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+    <button class="btn btn-primary w-100" type="submit">Sign in</button>
+  </form>
+  <p class="auth-bottom"><a href="{% url 'accounts:register' %}">Create account</a></p>
+</section>
+{% endblock %}

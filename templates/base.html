@@ -1,0 +1,68 @@
+{% load static ui %}<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111510">
+  <meta name="description" content="WeFiles — shared files and team chat.">
+  <meta name="htmx-config" content='{"allowEval":false,"includeIndicatorStyles":false,"historyCacheSize":0}'>
+  <title>{% block title %}Your shared workspace{% endblock %} · WeFiles</title>
+  <link rel="icon" href="{% static 'brand/logo.svg' %}" type="image/svg+xml">
+  <script src="{% static 'js/theme.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}?v=wefiles-simple-4">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v=wefiles-simple-4">
+  <link rel="stylesheet" href="{% static 'accounts/css/avatars.css' %}">
+  <noscript><link rel="stylesheet" href="{% static 'css/nojs.css' %}"></noscript>
+  <script defer src="{% static 'vendor/htmx/htmx.min.js' %}"></script>
+  <script defer src="{% static 'js/app.js' %}"></script>
+  {% if user.is_authenticated %}<script defer src="{% static 'notifications/js/refresh.js' %}"></script>{% endif %}
+  {% block feature_scripts %}{% endblock %}
+</head>
+<body class="{% if user.is_authenticated %}workspace{% else %}public{% endif %}">
+<a class="skip-link" href="#main">Skip to content</a>
+{% if user.is_authenticated %}
+<aside class="sidebar" id="navigation">
+  {% include 'components/brand.html' %}
+  <nav aria-label="Main navigation">
+    {% if user.approved %}
+    <a class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'core:dashboard' %}">{% icon 'grid' %}Overview</a>
+    <a class="nav-item {% if request.resolver_match.namespace == 'vault' and request.resolver_match.url_name != 'saved' %}active{% endif %}" href="{% url 'vault:list' %}">{% icon 'folder' %}All files</a>
+    <a class="nav-item {% if request.resolver_match.url_name == 'saved' %}active{% endif %}" href="{% url 'vault:saved' %}">{% icon 'bookmark' %}Saved files</a>
+    <a class="nav-item {% if request.resolver_match.namespace == 'chat' %}active{% endif %}" href="{% url 'chat:room' %}">{% icon 'chat' %}Chat</a>
+    {% else %}
+    <a class="nav-item active" href="{% url 'accounts:status' %}">{% icon 'shield' %}Account status</a>
+    {% endif %}
+    <a class="nav-item {% if request.resolver_match.namespace == 'notifications' %}active{% endif %}" href="{% url 'notifications:list' %}">{% icon 'bell' %}Notifications<span id="notification-badge" hx-get="{% url 'notifications:unread' %}" hx-trigger="wefiles:refresh from:body" hx-swap="innerHTML">{% include 'notifications/badge.html' %}</span></a>
+    {% if user.workspace_admin %}
+    <hr class="nav-divider">
+    <a class="nav-item {% if request.resolver_match.namespace == 'management' %}active{% endif %}" href="{% url 'management:admin_dashboard' %}">{% icon 'users' %}Admin</a>
+    <a class="nav-item {% if request.resolver_match.url_name == 'activity' %}active{% endif %}" href="{% url 'activity' %}">{% icon 'clock' %}Activity</a>
+    {% endif %}
+  </nav>
+  <div class="sidebar-bottom">
+    <a class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'accounts:profile' %}">{% icon 'settings' %}Account settings</a>
+    <a class="profile-link" href="{% url 'accounts:profile' %}">{% include 'accounts/components/avatar.html' with person=user %}<span><strong>{{ user.name }}</strong><small>{{ user.get_role_display }}</small></span>{% icon 'chevron' %}</a>
+    <form action="{% url 'accounts:logout' %}" method="post">{% csrf_token %}<button class="logout-button" type="submit">{% icon 'logout' %}Sign out</button></form>
+  </div>
+</aside>
+{% endif %}
+<div class="app-body">
+  {% if user.is_authenticated %}
+  <header class="topbar">
+    <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Toggle navigation" aria-controls="navigation" aria-expanded="false">{% icon 'menu' %}</button>
+    <span class="topbar-location">{% block location %}Overview{% endblock %}</span>
+    {% if user.approved %}<form class="global-search" action="{% url 'vault:list' %}" method="get" role="search" aria-label="Workspace search">{% icon 'search' %}<label for="workspace-search" class="visually-hidden">Search workspace files</label><input id="workspace-search" type="search" name="q" maxlength="100" placeholder="Search files"></form>{% endif %}
+    <div class="topbar-actions"><button type="button" class="icon-button theme-toggle" aria-label="Change color theme" title="Theme: system">{% icon 'sun' %}</button><a class="icon-button" aria-label="Notifications" href="{% url 'notifications:list' %}">{% icon 'bell' %}</a><a class="profile-shortcut" href="{% url 'accounts:profile' %}" aria-label="Your profile">{% include 'accounts/components/avatar.html' with person=user extra_class='avatar-small' %}</a></div>
+  </header>
+  {% else %}
+  <header class="public-header">{% include 'components/brand.html' %}<div><a href="{% url 'core:privacy' %}">Privacy</a><button type="button" class="icon-button theme-toggle" aria-label="Change color theme">{% icon 'sun' %}</button></div></header>
+  {% endif %}
+  <main id="main" class="main-content" tabindex="-1">
+    {% if messages %}<div class="feedback" aria-live="polite">{% for message in messages %}<div class="notice notice-{{ message.tags }}" role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">{% icon 'info' %}<span>{{ message }}</span></div>{% endfor %}</div>{% endif %}
+    <div id="action-error" class="notice notice-error" role="alert" hidden></div>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="app-footer"><span>WeFiles</span><a href="{% url 'core:privacy' %}">Privacy &amp; data</a></footer>
+</div>
+<div id="action-status" class="visually-hidden" role="status" aria-live="polite"></div>
+</body></html>

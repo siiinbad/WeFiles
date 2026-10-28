@@ -1,0 +1,50 @@
+name: wefiles
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: wefiles
+      POSTGRES_USER: wefiles
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your deployment environment}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wefiles -d wefiles"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DJANGO_DEBUG: "False"
+      PRIVATE_MEDIA_ROOT: /app/media
+      DATABASE_URL: postgres://wefiles:${POSTGRES_PASSWORD}@db:5432/wefiles
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  cleanup:
+    build: .
+    env_file: .env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DJANGO_DEBUG: "False"
+      PRIVATE_MEDIA_ROOT: /app/media
+      DATABASE_URL: postgres://wefiles:${POSTGRES_PASSWORD}@db:5432/wefiles
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "while true; do python manage.py process_storage_deletions; sleep 60; done"]
+    restart: unless-stopped
+volumes:
+  database:
+  media:

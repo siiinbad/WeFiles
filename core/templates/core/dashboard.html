@@ -1,0 +1,42 @@
+{% extends 'base.html' %}{% load ui %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <h1>Overview</h1>
+  <a class="btn btn-primary" href="{% url 'vault:upload' %}">{% icon 'upload' %}Upload file</a>
+</div>
+<section class="stats-grid" aria-label="Workspace statistics">
+  <article class="stat-card"><span class="stat-icon">{% icon 'file' %}</span><div><small>Files</small><strong>{{ stats.total }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon">{% icon 'folder' %}</span><div><small>Folders</small><strong>{{ folder_count }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon">{% icon 'users' %}</span><div><small>Members</small><strong>{{ member_count }}</strong></div></article>
+  <article class="stat-card"><span class="stat-icon">{% icon 'storage' %}</span><div><small>Storage</small><strong class="stat-storage">{{ stats.storage|default:0|filesizeformat }}</strong></div></article>
+</section>
+<div class="dashboard-columns">
+  <section class="panel">
+    <div class="section-heading"><h2>Recent files</h2><a class="text-link" href="{% url 'vault:list' %}">View all</a></div>
+    {% if recent_files %}
+    <div class="file-table-wrap"><table class="file-table">
+      <thead><tr><th scope="col">Name</th><th scope="col">Shared by</th><th scope="col">Size</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+      <tbody>{% for file in recent_files %}
+        <tr>
+          <td><a class="file-name" href="{% url 'vault:detail' file.pk %}"><span class="file-icon">{% icon 'file' %}</span><span><strong>{{ file.name }}</strong><small>{{ file.folder.name|default:'Root' }}</small></span></a></td>
+          <td><span class="owner-person">{% include 'accounts/components/avatar.html' with person=file.owner extra_class='avatar-xs' %}<span class="owner-name">{{ file.owner.name }}</span></span></td>
+          <td class="text-muted">{{ file.size_bytes|filesizeformat }}</td>
+          <td><a class="icon-button" href="{% url 'vault:download' file.pk %}" aria-label="Download {{ file.name }}">{% icon 'download' %}</a></td>
+        </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="empty-state"><h3>No files yet</h3><a class="btn btn-outline-secondary" href="{% url 'vault:upload' %}">Upload file</a></div>
+    {% endif %}
+  </section>
+  <section class="panel crew-panel">
+    <div class="section-heading"><h2>Recent messages</h2><a class="text-link" href="{% url 'chat:room' %}">Open chat</a></div>
+    <div class="recent-chat">
+      {% for message in recent_messages %}
+      <article class="chat-preview">{% include 'accounts/components/avatar.html' with person=message.sender %}<div><strong>{{ message.sender.name }}</strong><time>{{ message.created_at|timesince }} ago</time><p>{{ message.content|truncatechars:120 }}</p></div></article>
+      {% empty %}<div class="empty-state compact"><h3>No messages yet</h3></div>{% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

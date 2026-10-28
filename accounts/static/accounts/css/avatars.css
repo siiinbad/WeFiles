@@ -1,0 +1,50 @@
+/* Personal avatars: one visual identity across the workspace. */
+.avatar .icon { width: 23px; height: 23px; stroke-width: 1.65; }
+.avatar-small .icon { width: 21px; height: 21px; }
+.large-avatar .icon { width: 43px; height: 43px; }
+.profile-shortcut { display: inline-flex; text-decoration: none; border-radius: 6px; }
+.profile-avatar-caption { font-size: 11px; color: var(--muted); margin: 5px 0 8px; }
+.avatar[data-avatar="avatar-cat"], .avatar[data-avatar="avatar-rabbit"], .avatar[data-avatar="avatar-ghost"], .avatar[data-avatar="avatar-moon"] { background: #f0eaff; color: #6942a8; border-color: #dfd2f8; }
+.avatar[data-avatar="avatar-fox"], .avatar[data-avatar="avatar-bear"], .avatar[data-avatar="avatar-crown"], .avatar[data-avatar="avatar-sun"] { background: #fff0dd; color: #9b571e; border-color: #f2dbba; }
+.avatar[data-avatar="avatar-frog"], .avatar[data-avatar="avatar-dino"], .avatar[data-avatar="avatar-leaf"], .avatar[data-avatar="avatar-mountain"] { background: #e4f5ec; color: #256648; border-color: #c4e4d3; }
+.avatar[data-avatar="avatar-owl"], .avatar[data-avatar="avatar-koala"], .avatar[data-avatar="avatar-rocket"], .avatar[data-avatar="avatar-bolt"] { background: #ffe9ec; color: #a63c57; border-color: #f2cdd6; }
+.avatar[data-avatar="avatar-penguin"], .avatar[data-avatar="avatar-whale"], .avatar[data-avatar="avatar-planet"], .avatar[data-avatar="avatar-astronaut"] { background: #e2f5fa; color: #1d6c7d; border-color: #bedfe8; }
+.avatar-picker { min-width: 0; padding: 0 0 25px; margin: 0 0 24px; border: 0; border-bottom: 1px solid var(--line); }
+.avatar-picker legend { display: flex; align-items: center; gap: 9px; float: none; width: auto; margin-bottom: 6px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.avatar-library-count { font-size: 9px; letter-spacing: .3px; font-weight: 650; color: var(--muted); padding: 2px 6px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 3px; }
+.avatar-picker > .field-help { margin: 0 0 16px; max-width: 460px; }
+.avatar-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.avatar-grid .avatar-choice { position: relative; display: block; margin: 0; min-width: 0; cursor: pointer; }
+.avatar-option-body { display: flex; align-items: center; flex-direction: column; position: relative; gap: 7px; padding: 11px 3px 8px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); transition: border-color .15s ease, background .15s ease; }
+.avatar-option-body .avatar { width: 39px; height: 39px; border-radius: 8px; }
+.avatar-option-body .avatar .icon { width: 27px; height: 27px; }
+.avatar-name { font-size: 9px; font-weight: 550; color: var(--muted); line-height: 1.3; white-space: nowrap; }
+.avatar-selected { position: absolute; top: 3px; right: 3px; display: none; align-items: center; justify-content: center; width: 14px; height: 14px; background: var(--primary); color: var(--surface); border-radius: 3px; }
+.avatar-selected .icon { width: 10px; height: 10px; stroke-width: 2.5; }
+.avatar-choice:hover .avatar-option-body { border-color: var(--primary); background: var(--surface-soft); }
+.avatar-radio:checked + .avatar-option-body { border: 2px solid var(--primary); padding: 10px 2px 7px; background: var(--tint); }
+.avatar-radio:checked + .avatar-option-body .avatar-name { color: var(--primary); font-weight: 700; }
+.avatar-radio:checked + .avatar-option-body .avatar-selected { display: flex; }
+.avatar-radio:focus-visible + .avatar-option-body { outline: 3px solid var(--primary); outline-offset: 3px; }
+.avatar-radio:disabled + .avatar-option-body { opacity: .5; cursor: not-allowed; }
+[data-bs-theme="dark"] .avatar[data-avatar] { filter: brightness(.94); }
+@media (max-width: 1200px) and (min-width: 1024px) { .avatar-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 540px) { .avatar-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; } .avatar-option-body { padding-block: 10px 8px; } .avatar-name { font-size: 9px; } }
+
+.owner-person { display: inline-flex; align-items: center; gap: 8px; }
+.avatar-xs { width: 25px; height: 25px; border-radius: 5px; }
+.avatar-xs .icon { width: 18px; height: 18px; }
+
+/* Portraits use the complete original tile plus a white ID-photo safe area. */
+.avatar[data-avatar^="portrait-"] { background: #fff; border-color: var(--line); padding: 1px; overflow: visible; }
+.avatar .portrait-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.avatar-option-body .avatar[data-avatar^="portrait-"] { width: 56px; height: 56px; border-radius: 5px; }
+.avatar-option-body .avatar .portrait-art { width: 100%; height: 100%; }
+.avatar-choice .avatar-option-body { gap: 7px; padding: 10px 3px 9px; }
+.avatar-radio:checked + .avatar-option-body { padding: 9px 2px 8px; }
+.avatar-name { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; min-height: 24px; display: flex; align-items: center; justify-content: center; }
+.large-avatar[data-avatar^="portrait-"] { width: 80px; height: 80px; }
+[data-bs-theme="dark"] .avatar[data-avatar^="portrait-"] { background: #fff; filter: none; }
+@media (max-width: 540px) { .avatar-option-body .avatar[data-avatar^="portrait-"] { width: 49px; height: 49px; } }
+/* Keep selection badges outside the photo area, including on narrow screens. */
+.avatar-choice .avatar-selected { top: -5px; right: -5px; box-shadow: 0 0 0 2px var(--surface); }

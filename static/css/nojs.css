@@ -1,0 +1,10 @@
+@media (max-width: 1023px) {
+  .sidebar { position: static; width: 100%; transform: none; box-shadow: none; padding: 20px; }
+  .sidebar .brand { margin-bottom: 20px; }
+  .sidebar nav { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0; }
+  .sidebar .nav-divider, .sidebar .profile-link { display: none; }
+  .sidebar .nav-item { font-size: 12px; padding: 9px; }
+  .sidebar-bottom { padding-top: 10px; margin: 0; display: flex; justify-content: space-between; align-items: center; }
+  .sidebar-bottom > .nav-item { margin: 0; }
+  .mobile-menu { display: none; }
+}
